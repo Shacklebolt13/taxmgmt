@@ -1,0 +1,7 @@
+version: "3.6"
+services:
+  django:
+    build: .
+    image: taxmmgmt/django
+    ports:
+      - "8000:8000"

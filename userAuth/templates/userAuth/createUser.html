@@ -1,0 +1,44 @@
+{% extends 'userAuth/base.html' %}
+{% load custom_tags %}
+{% block navbar %}
+{% getNavbar 2%}
+
+{% endblock navbar %}
+
+{% block body %}
+
+
+
+
+<div class="card" style="top: 30%;left:35%;position: absolute">
+    <h5 class="card-header">Create User</h5>
+    <div class="card-body" style="min-width: 600px;">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">username</label>
+                {{userform.username}}
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">UserType</label>
+                {{userform.user_type}}
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">state</label>
+                {{userform.state}}
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <center><button type="submit" class="btn btn-dark">LOGIN</button></center>
+
+        </form>
+
+    </div>
+</div>
+</script>
+
+
+{% endblock body %}

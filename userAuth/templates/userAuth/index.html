@@ -1,0 +1,89 @@
+{% extends 'userAuth/base.html' %}
+{% load custom_tags %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block navbar %}
+{% getNavbar 1%}
+{% endblock navbar %}
+
+{% block body %}
+
+<div class="card ">
+    <div class="card-body" style="min-width: 100%;">
+        <h5 class="card-header">
+            <div class="container">
+                <div class="row align-items-start">
+                    <div class="col">
+                        Tax Due on
+                    </div>
+                    <div class="col">
+                        Tax amount
+                    </div>
+                    <div class="col">
+                        status
+                    </div>
+
+                    <div class="col">
+                        Actions
+                    </div>
+
+                </div>
+            </div>
+        </h5>
+        <ul class="list-group list-group-flush" id="taxes">
+
+
+            {% for tax in taxes %}
+            <li class="list-group-item" style="margin-top: 2%;">
+
+                <div class="container">
+                    <div class="row align-items-start">
+
+                        <div class="col">
+                            {{tax.due_on}}
+                        </div>
+                        <div class="col">
+                            {{tax.finalAmt}}
+                        </div>
+                        <div class="col">
+                            {% getStatus tax.due_on%}
+                        </div>
+                        <div class="col">
+                            {% if tax.paid %}
+                            <span class=" my-0 btn btn-success">PAID</span>
+                            {% else %}
+                            <span class="my-0 btn btn-danger" onclick="pay({{tax.pk}})">PAY NOW !</span>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+
+            </li>
+            {% endfor %}
+
+
+
+        </ul>
+
+    </div>
+</div>
+
+
+<script>
+    function pay(taxId) {
+        $.ajax({
+            url: '/userAuth/payTax/' + taxId,
+            type: 'GET',
+            success: function (data) {
+                if (data.success) {
+                    $('#taxes').html(data.html);
+                }
+            }
+        });
+    }
+</script>
+{% endblock body %}
