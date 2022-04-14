@@ -8,6 +8,9 @@ from . import forms, models
 from django.db.models import Q, Sum
 
 
+# ps: i could have used custom created permission classes, but that would have been an overkill, so i stuck with checking the user's clearance.
+
+
 class LoginView(View):
     def get(self, request: HttpRequest):
         return render(request, "userAuth/login.html")
@@ -95,19 +98,26 @@ class IndexView(View):
         dictV = {"taxes": taxes}
         return render(request, "userAuth/index.html", dictV)
 
+    def post(self, request: HttpRequest):
+        pk = request.POST.get("pay", None)
+        models.TaxCalc.objects.get(pk=pk).setPaid()
+        return redirect("index")
 
-@method_decorator(login_required, name="get")  # TODO remake
+
+@method_decorator(login_required, name="get")
 class CreateTaxView(View):
-    def get(self, request: HttpRequest):
-        if request.user.user_type < 2:
+    def get(self, request: HttpRequest, pk):
+        if request.user.user_type == 2:
             return redirect("index")
         dictV = {"taxform": forms.createTaxForm}
         return render(request, "userAuth/createTax.html", dictV)
 
-    def post(self, request: HttpRequest):
-        if request.user.user_type < 2:
+    def post(self, request: HttpRequest, pk):
+        dictV = {"taxform": forms.createTaxForm}
+        if request.user.user_type == 2:
             return redirect("index")
-
+        data = request.POST.copy()
+        data["user"] = models.User.objects.get(pk=pk)
         taxform = forms.createTaxForm(request.POST)
         if taxform.is_valid():
             tax = taxform.save(commit=False)
@@ -115,5 +125,6 @@ class CreateTaxView(View):
             tax.save()
             return redirect("index")
         else:
-            dictV = {"taxform": taxform}
+
+            dictV["error"] = taxform.errors
             return render(request, "userAuth/createTax.html", dictV, status=400)

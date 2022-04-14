@@ -64,7 +64,6 @@ class TaxCalcViewSet(ModelViewSet):
                 "due_on",
                 "paid",
                 "updated_on",
-                "state",
             ]
 
     serializer_class = TaxCalcSerializer

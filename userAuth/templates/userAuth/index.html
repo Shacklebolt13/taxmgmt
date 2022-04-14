@@ -55,7 +55,13 @@
                             {% if tax.paid %}
                             <span class=" my-0 btn btn-success">PAID</span>
                             {% else %}
-                            <span class="my-0 btn btn-danger" onclick="pay({{tax.pk}})">PAY NOW !</span>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="pay" value="{{tax.pk}}">
+                                <input class="my-0 btn btn-danger" id="pay{{tax.pk}}" style="max-width: fit-content;"
+                                    type="Submit" value='PAY NOW!'>
+                            </form>
+
                             {% endif %}
                         </div>
 
@@ -71,19 +77,4 @@
 
     </div>
 </div>
-
-
-<script>
-    function pay(taxId) {
-        $.ajax({
-            url: '/userAuth/payTax/' + taxId,
-            type: 'GET',
-            success: function (data) {
-                if (data.success) {
-                    $('#taxes').html(data.html);
-                }
-            }
-        });
-    }
-</script>
 {% endblock body %}

@@ -35,8 +35,9 @@ def getNavbar(context, active):
     return navbar
 
 
-def setDisabled(user, min):
-    if user.user_type < min:
+def setDisabled(user, min, only=False):
+
+    if (user.user_type < min) if not only else (user.user_type == min):
         return "disabled"
     else:
         return ""

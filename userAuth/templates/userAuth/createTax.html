@@ -1,0 +1,58 @@
+{% extends 'userAuth/base.html' %}
+{% load custom_tags %}
+{% block navbar %}
+{% getNavbar 3%}
+
+{% endblock navbar %}
+
+{% block body %}
+
+
+
+
+<div class="card" style="top: 10%;left:35%;position: absolute">
+    <h5 class="card-header">Create User</h5>
+    <div class="card-body" style="min-width: 600px;">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">User Income</label>
+                {{taxform.baseIncome}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Allowance</label>
+                {{taxform.allowance}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Taxable Prequisites</label>
+                {{taxform.taxable_prereq}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label"> Income From Property</label>
+                {{taxform.income_from_property}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Short Term Capital Gains From Immovable Property</label>
+                {{taxform.st_cap_gain_immovable}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Long Term Capital Gains From Immovable Property</label>
+                {{taxform.lt_cap_gain_immovable}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pan Card Number</label>
+                {{taxform.pan}}
+            </div>
+
+
+
+            <center><button type="submit" class="btn btn-dark">TAX EM!</button></center>
+
+        </form>
+
+    </div>
+</div>
+</script>
+
+
+{% endblock body %}

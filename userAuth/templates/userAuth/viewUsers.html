@@ -51,7 +51,12 @@
                             {{user.total_due|default_if_none:0.00|floatformat:2}} INR
                         </div>
                         <div class="col">
-                            <a href="{% url 'createTax' %}" class="btn btn-primary"> Make Tax</a>
+                            {% if request.user.user_type != 2 %}
+                            <a href="#" class="btn btn-secondary"> Make Tax</a>
+                            {% else %}
+                            <a href="{% url 'createTax' user.pk %}" class="btn btn-primary"> Make Tax</a>
+                            {% endif %}
+
                         </div>
 
                     </div>

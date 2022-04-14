@@ -31,7 +31,7 @@ urlpatterns = [
     path("login/", webViews.LoginView.as_view(), name="login"),
     path("logout/", webViews.LogoutView.as_view(), name="logout"),
     path("createUser/", webViews.CreateUserView.as_view(), name="createUser"),
-    path("createTax/", webViews.CreateTaxView.as_view(), name="createTax"),
+    path("createTax/<int:pk>", webViews.CreateTaxView.as_view(), name="createTax"),
     path("viewUsers/", webViews.ViewUsersView.as_view(), name="viewUsers"),
     path("", webViews.IndexView.as_view(), name="index"),
 ]

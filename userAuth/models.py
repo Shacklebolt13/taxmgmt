@@ -54,7 +54,7 @@ class User(AbstractUser):
 
     types = ((1, "TaxPayer"), (2, "TaxAccountant"), (3, "Admin"))
     user_type = models.IntegerField(choices=types, default=1)
-    state = models.CharField(choices=states + ut, max_length=50)
+    state = models.ForeignKey("userAuth.taxrates", on_delete=models.CASCADE, null=True)
 
     def save(self, clearance=1, *args, **kwargs):
         print(args, kwargs)
@@ -103,7 +103,6 @@ class TaxCalc(models.Model):
     income_from_property = models.FloatField()
     st_cap_gain_immovable = models.FloatField()
     lt_cap_gain_immovable = models.FloatField()
-    state = models.ForeignKey(TaxRates, on_delete=models.RESTRICT)
     updated_on = models.DateTimeField(auto_now=True)
     created_on = models.DateTimeField(auto_now_add=True)
     paid_on = models.DateTimeField(null=True, blank=True, editable=False)
@@ -149,7 +148,7 @@ class TaxCalc(models.Model):
 
     @property
     def gst(self):
-        return self.state.rate + TaxRates.objects.get(isCentral=True).rate
+        return self.user.state.rate + TaxRates.objects.get(isCentral=True).rate
 
     @property
     def total_tax(self):
