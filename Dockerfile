@@ -18,7 +18,7 @@ RUN python manage.py makeadmin
 
 RUN python manage.py initDb
 RUN python manage.py createMass
-
+RUN python manage.py test
 
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

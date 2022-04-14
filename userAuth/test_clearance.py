@@ -6,5 +6,23 @@ from . import models
 
 class ClearanceTest(TestCase):
     def test_clearance(self):
-        self.client.user = models.User.objects.create(username="test", user_type=1)
-        self.client.login()
+        passw = "test"
+        uname = "test"
+
+        user = models.User.objects.create(username=uname, user_type=1)
+        user.set_password(passw)
+        user.save()
+
+        models.User.objects.create(username="tpayer", user_type=2).save()
+        models.User.objects.create(username="adm", user_type=3).save()
+
+        print(
+            "logged In"
+            if self.client.login(username=uname, password=passw)
+            else "not logged in"
+        )
+        self.getUser()
+
+    def getUser(self):
+        resp = self.client.get("/api/users/")
+        assert len(resp.data) == 1
