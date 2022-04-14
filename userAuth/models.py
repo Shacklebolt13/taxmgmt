@@ -183,5 +183,5 @@ class TaxCalc(models.Model):
         return super(TaxCalc, self).save(*args, **kwargs)
 
     def setPaid(self):
-        self.paid_on = datetime.datetime.now()
+        self.paid_on = datetime.datetime.now(tz=pytz.timezone(settings.TIME_ZONE))
         self.save(paid_now=True)

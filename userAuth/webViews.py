@@ -81,12 +81,12 @@ class ViewUsersView(View):
     def get(self, request: HttpRequest):
         dictV = {
             "users": models.User.objects.all()
-            .filter(user_type__lte=request.user.user_type)
             .annotate(
                 total_due=Sum(
                     "taxcalc__finalAmt", filter=Q(taxcalc__paid_on__isnull=True)
                 )
             )
+            .filter(user_type__lte=request.user.user_type)
         }
         return render(request, "userAuth/viewUsers.html", dictV)
 
@@ -104,14 +104,23 @@ class IndexView(View):
 
     def post(self, request: HttpRequest):
         pk = request.POST.get("pay", None)
-        models.TaxCalc.objects.get(pk=pk).setPaid()
-        return redirect("index")
+        tax = models.TaxCalc.objects.get(pk=pk)
+        if tax.user.pk == request.user.pk:
+            tax.setPaid()
+            return redirect("index")
+        taxes = (
+            request.user.taxcalc_set.all()
+            if request.user.user_type == 1
+            else models.TaxCalc.objects.all()
+        )
+        dictV = {"taxes": taxes, "error": "You are not authorized to pay this tax"}
+        return render(request, "userAuth/index.html", dictV)
 
 
 @method_decorator(login_required, name="get")
 class CreateTaxView(View):
     def get(self, request: HttpRequest, pk):
-        if request.user.user_type == 2:
+        if request.user.user_type != 2:
             return redirect("index")
         dictV = {"taxform": forms.createTaxForm}
         return render(request, "userAuth/createTax.html", dictV)
@@ -121,14 +130,12 @@ class CreateTaxView(View):
         if request.user.user_type != 2:
             return redirect("index")
         data = request.POST.copy()
-        data["user"] = models.User.objects.get(pk=pk)
         taxform = forms.createTaxForm(request.POST)
         if taxform.is_valid():
             tax = taxform.save(commit=False)
-            tax.user = request.user
+            tax.user = models.User.objects.get(pk=pk)
             tax.save()
             return redirect("index")
         else:
-
             dictV["error"] = taxform.errors
             return render(request, "userAuth/createTax.html", dictV, status=400)

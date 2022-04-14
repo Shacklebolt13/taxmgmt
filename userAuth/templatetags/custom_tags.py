@@ -24,7 +24,7 @@ def getNavbar(context, active):
         </li>
         
         <li class="nav-item">
-            <a class="nav-link {setActive(active,3)}   { setDisabled(user,3) }" href="{reverse_lazy('viewUsers')}" >View Users</a>
+            <a class="nav-link {setActive(active,3)}   { setDisabled(user,2) }" href="{reverse_lazy('viewUsers')}" >View Users</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{reverse_lazy('logout')}" style="right:20px;position:absolute">Logout</a>
@@ -36,11 +36,17 @@ def getNavbar(context, active):
 
 
 def setDisabled(user, min, only=False):
-
-    if (user.user_type < min) if not only else (user.user_type == min):
-        return "disabled"
+    print(user.user_type, min)
+    if not only:
+        if user.user_type >= min:
+            return ""
+        else:
+            return "disabled"
     else:
-        return ""
+        if user.user_type != min:
+            return "disabled"
+        else:
+            return ""
 
 
 def setActive(original, this):

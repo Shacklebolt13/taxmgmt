@@ -28,4 +28,9 @@ class TaxCalcAdmin(admin.ModelAdmin):
         return "Paid" if obj.paid else "Not Paid"
 
 
-admin.site.register(models.TaxRates)
+@admin.register(models.TaxRates)
+class TaxRatesAdmin(admin.ModelAdmin):
+    list_display = ("name", "Gst")
+
+    def Gst(self, obj):
+        return f"{obj.rate:2.0f}%"
