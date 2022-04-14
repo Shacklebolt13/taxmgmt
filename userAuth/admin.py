@@ -20,5 +20,12 @@ class UserAdminAdvanced(UserAdmin):
         obj.save(clearance=request.user.user_type)
 
 
-admin.site.register(models.TaxCalc)
+@admin.register(models.TaxCalc)
+class TaxCalcAdmin(admin.ModelAdmin):
+    list_display = ("user", "finalAmt", "paid")
+
+    def paid(self, obj):
+        return "Paid" if obj.paid else "Not Paid"
+
+
 admin.site.register(models.TaxRates)

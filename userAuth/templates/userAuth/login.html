@@ -1,15 +1,24 @@
 {% extends 'userAuth/base.html' %}
-
+{% load static %}
 {% block title %}
 LOGIN
 {% endblock title %}
+
+{% block css %}
+<style>
+    body {
+        background:url("{% static 'userAuth/bg_login.jpg' %}") no-repeat;
+        background-size: 100% 100vh;
+    }
+</style>
+{% endblock css %}
 
 {% block body %}
 
 
 
 
-<div class="card" style="top: 34%;left:39%;position: absolute">
+<div class="card" style="top: 34%;left:39%;position: absolute;background: rgba(255, 255, 255, 0.7);">
     <h5 class="card-header">LOGIN</h5>
     <div class="card-body" style="min-width: 400px;">
         <form method="post">

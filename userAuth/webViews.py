@@ -94,7 +94,11 @@ class ViewUsersView(View):
 @method_decorator(login_required, name="get")
 class IndexView(View):
     def get(self, request: HttpRequest):
-        taxes = request.user.taxcalc_set.all()
+        taxes = (
+            request.user.taxcalc_set.all()
+            if request.user.user_type == 1
+            else models.TaxCalc.objects.all()
+        )
         dictV = {"taxes": taxes}
         return render(request, "userAuth/index.html", dictV)
 
@@ -114,7 +118,7 @@ class CreateTaxView(View):
 
     def post(self, request: HttpRequest, pk):
         dictV = {"taxform": forms.createTaxForm}
-        if request.user.user_type == 2:
+        if request.user.user_type != 2:
             return redirect("index")
         data = request.POST.copy()
         data["user"] = models.User.objects.get(pk=pk)

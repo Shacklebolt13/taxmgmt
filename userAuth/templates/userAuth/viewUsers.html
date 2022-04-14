@@ -10,7 +10,7 @@
 
 {% block body %}
 
-<div class="card">
+<div class="card" style="background: rgba(255, 255, 255, 0.9);">
     <div class="card-body">
         <h5 class="card-header">
             <div class="container">
@@ -32,20 +32,22 @@
                 </div>
             </div>
         </h5>
-        <ul class="list-group list-group-flush" style="margin-top: 5%;" id="taxes">
+
+
+        <ul class="list-group list-group-flush" style="margin-top: 5%; " id="taxes">
 
 
             {% for user in users %}
-            <li class="list-group-item">
+            <li class="list-group-item" style="background: rgba(255, 255, 255, 0);">
 
                 <div class="container">
                     <div class="row align-items-start">
 
                         <div class="col">
-                            {{user.username}}
+                            {{user.get_full_name|default:user.username}}
                         </div>
                         <div class="col">
-                            {{user.state}}
+                            {{user.state.name}}
                         </div>
                         <div class="col">
                             {{user.total_due|default_if_none:0.00|floatformat:2}} INR
@@ -71,5 +73,5 @@
 
     </div>
 </div>
-
+</div>
 {% endblock body %}

@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -67,8 +68,14 @@ class User(AbstractUser):
 
         super(User, self).save(*args, **kwargs)
 
+    def __str__(self) -> str:
+        return self.get_full_name() or self.username
+
 
 class TaxRates(models.Model):
+    class Meta:
+        verbose_name_plural = "State/UT Tax Rates"
+
     class DuplicateCentralError(Exception):
         pass
 
@@ -93,6 +100,9 @@ class TaxRates(models.Model):
 
 
 class TaxCalc(models.Model):
+    class Meta:
+        verbose_name_plural = "Users' Taxes"
+
     class AlreadyPaidException(Exception):
         pass
 
@@ -155,9 +165,6 @@ class TaxCalc(models.Model):
         tot = self._total_tax
         tot += tot * self.gst / 100
         return tot
-
-    def __str__(self) -> str:
-        return f"{self.user.get_full_name()}: {self.total_tax}:{'paid' if self.paid else 'not paid'}:{self.due_on}"
 
     def save(self, paid_now=False, *args, **kwargs):
         print(kwargs)

@@ -7,14 +7,6 @@ import random
 class Command(BaseCommand):
     def handle(self, *args, **options):
         if not User.objects.count() == 0:
-            # create admin
-            # admin = User.objects.create_superuser(username="admin", password="admin")
-            # admin.type = 3
-            # admin.is_active = True
-            # admin.is_admin = True
-            # admin.save()
-
-            # create states and their rates
             states = [
                 "Andhra Pradesh",
                 "Arunachal Pradesh",
