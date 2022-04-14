@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from userAuth import apiViews, webViews
 from rest_framework import routers
+from rest_framework.authtoken import views as tokenViews
 
 
 router = routers.DefaultRouter()
@@ -34,4 +35,5 @@ urlpatterns = [
     path("createTax/<int:pk>", webViews.CreateTaxView.as_view(), name="createTax"),
     path("viewUsers/", webViews.ViewUsersView.as_view(), name="viewUsers"),
     path("", webViews.IndexView.as_view(), name="index"),
+    path("api/auth/", tokenViews.obtain_auth_token),
 ]

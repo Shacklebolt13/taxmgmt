@@ -53,6 +53,9 @@ class User(AbstractUser):
     class NotEnoughClearanceException(Exception):
         pass
 
+    class CentralAsStateException(Exception):
+        pass
+
     types = ((1, "TaxPayer"), (2, "TaxAccountant"), (3, "Admin"))
     user_type = models.IntegerField(choices=types, default=1)
     state = models.ForeignKey("userAuth.taxrates", on_delete=models.CASCADE, null=True)
@@ -65,6 +68,10 @@ class User(AbstractUser):
                 raise self.NotEnoughClearanceException(
                     "You don't have enough clearance to do this"
                 )
+
+        if self.state and self.state.isCentral == True:
+            print(self.state.isCentral)
+            raise self.CentralAsStateException("Central cannot be a state")
 
         super(User, self).save(*args, **kwargs)
 
