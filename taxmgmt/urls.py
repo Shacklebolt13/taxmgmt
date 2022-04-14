@@ -14,10 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from userAuth import apiViews, webViews
 from rest_framework import routers
 from rest_framework.authtoken import views as tokenViews
+
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Tax Management API",
+        default_version="v0",
+        description="Api description and schema",
+        terms_of_service="",
+        contact=openapi.Contact(email="grimmgagan@gmail.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
 
 
 router = routers.DefaultRouter()
@@ -36,4 +53,9 @@ urlpatterns = [
     path("viewUsers/", webViews.ViewUsersView.as_view(), name="viewUsers"),
     path("", webViews.IndexView.as_view(), name="index"),
     path("api/auth/", tokenViews.obtain_auth_token),
+    path(
+        "docs/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
 ]

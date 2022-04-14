@@ -60,17 +60,24 @@ class User(AbstractUser):
     user_type = models.IntegerField(choices=types, default=1)
     state = models.ForeignKey("userAuth.taxrates", on_delete=models.CASCADE, null=True)
 
-    def save(self, clearance=1, *args, **kwargs):
-        print(args, kwargs)
+    def save(self, clrnce=1, *args, **kwargs):
         uf = kwargs.get("update_fields")
-        if uf is not None and not (len(uf) == 1 and uf[0] == "last_login"):
-            if self.user_type > clearance:
-                raise self.NotEnoughClearanceException(
-                    "You don't have enough clearance to do this"
-                )
+
+        allow = False
+
+        if uf is not None and len(uf) == 1 and uf[0] == "last_login":
+            allow = True
+
+        if clrnce >= self.user_type:
+            allow = True
+
+        if not allow:
+            raise self.NotEnoughClearanceException(
+                "You don't have enough clearance to do this"
+            )
 
         if self.state and self.state.isCentral == True:
-            print(self.state.isCentral)
+
             raise self.CentralAsStateException("Central cannot be a state")
 
         super(User, self).save(*args, **kwargs)
@@ -174,7 +181,7 @@ class TaxCalc(models.Model):
         return tot
 
     def save(self, paid_now=False, *args, **kwargs):
-        print(kwargs)
+
         self.finalAmt = self.total_tax
         if not paid_now:
             if self.paid_on is not None:

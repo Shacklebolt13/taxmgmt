@@ -6,23 +6,46 @@ from . import models
 
 class ClearanceTest(TestCase):
     def test_clearance(self):
-        passw = "test"
-        uname = "test"
+        self.passw = "test"
+        self.uname = "test"
 
-        user = models.User.objects.create(username=uname, user_type=1)
-        user.set_password(passw)
+        models.User(username="tpayer", user_type=2).save(clrnce=3)
+        models.User(username="adm", user_type=3).save(clrnce=3)
+
+        self.getUserLow()
+        self.userClearanceUpgrade()
+        self.getUserHigh()
+
+    def getUserLow(self):
+
+        user = models.User(username=self.uname, user_type=1)
+        user.set_password(self.passw)
         user.save()
 
-        models.User.objects.create(username="tpayer", user_type=2).save()
-        models.User.objects.create(username="adm", user_type=3).save()
+        self.user = user
 
-        print(
-            "logged In"
-            if self.client.login(username=uname, password=passw)
-            else "not logged in"
-        )
-        self.getUser()
+        assert self.client.login(username=self.uname, password=self.passw) == True
 
-    def getUser(self):
         resp = self.client.get("/api/users/")
         assert len(resp.data) == 1
+
+    def userClearanceUpgrade(self):
+
+        self.user.user_type = 3
+        try:
+            self.user.save()
+            t = True
+        except:
+            t = False
+
+        assert t == False
+
+    def getUserHigh(self):
+
+        self.user_type = 3
+        self.user.save(clrnce=3)
+
+        assert self.client.login(username=self.uname, password=self.passw) == True
+
+        resp = self.client.get("/api/users/")
+        assert len(resp.data) > 1
