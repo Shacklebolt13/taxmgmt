@@ -26,9 +26,13 @@ Authentication : "Token < token >"
 
 Api Login can be done via `/api/auth/` end point. Send data as
 
-username : < username >
+username : `<username>`
 
-password : < password >
+password : `<password>`
+
+## Default Credential 
+the default credentials to login are `admin:admin`. These are the *admin* credentials, use the admin panel, accessible via `/admin/` to create more users or set passwords for existing users to login.
 
 ## Rest of the UI can be accessed directly via the site itself
 ## Thanks a lot for this opportunity to prove my worth, looking forward for the results of my evaluation .
+
