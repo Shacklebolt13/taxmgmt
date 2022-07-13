@@ -19,11 +19,10 @@ pipeline {
       }
     }
     
-    stage('Fake Db Init') {
+    stage('Db Init') {
       agent any
       steps {
         sh 'python3 manage.py initDb'
-        sh 'python3 manage.py createMass'
       }
     }
     
