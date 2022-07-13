@@ -8,4 +8,4 @@ class Command(BaseCommand):
         user = models.User.objects.create_superuser("admin", "admin", "admin")
         user.user_type = 3
         # user.state = models.TaxRates.objects.order_by("?")[0]
-        user.save(clearance=3)
+        user.save(clrnce=3)
