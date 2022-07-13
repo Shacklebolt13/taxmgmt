@@ -4,7 +4,7 @@ pipeline {
     stage('Build') {
       agent any
       steps {
-        sh 'docker --help'
+        sh 'python --version'
       }
     }
   }
