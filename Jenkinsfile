@@ -15,22 +15,22 @@ pipeline {
         sh 'python3 -m pip install -r requirements.txt'
         sh 'rm -f db.sqlite3 '
         sh 'python3 manage.py migrate'        
-        sh 'python manage.py makeadmin'
+        sh 'python3 manage.py makeadmin'
       }
     }
     
     stage('Fake Db Init') {
       agent any
       steps {
-        sh 'python manage.py initDb'
-        sh 'python manage.py createMass'
+        sh 'python3 manage.py initDb'
+        sh 'python3 manage.py createMass'
       }
     }
     
     stage('Test') {
       agent any
       steps {
-        sh 'python manage.py test'
+        sh 'python3 manage.py test'
       }
     }
   }
