@@ -36,4 +36,3 @@ the default credentials to login are `admin:admin`. These are the *admin* creden
 ## Rest of the UI can be accessed directly via the site itself
 ## Thanks a lot for this opportunity to prove my worth, looking forward for the results of my evaluation .
 
-
